@@ -24,11 +24,12 @@ The main documentation is always the best beginning, so if you haven't read yet,
 * [Rust in practice](#rust-in-practice)
 * [Best Practices/Style Guides](#best-practicesstyle-guides)
 * [Cheat sheets](#cheat-sheets)
-* [RFCs](#rfcs)
+* [Rust internals](#rust-internals)
 * [Compilation](#compilation)
 * [FFI](#ffi)
 * [CI / Testing](#ci--testing)
 * [Debug / Profiling](#debug--profiling)
+* [Are we ... yet?](#are-we--yet)
 * [Comparison with Other Languages](#comparison-with-other-languages)
 * [Applications / Libraries / Tools](#applications--libraries--tools)
 * [Language stuff](#language-stuff)
@@ -39,6 +40,7 @@ The main documentation is always the best beginning, so if you haven't read yet,
   * [Lifetime](#lifetime)
   * [Macros](#macros)
   * [MIR](#mir)
+  * [Modules](#modules)
   * [Monads](#monads)
   * [Ownership / Concurrency](#ownership--concurrency)
   * [Privacy](#privacy)
@@ -51,22 +53,29 @@ The main documentation is always the best beginning, so if you haven't read yet,
 * [People](#people)
   * [Famous Rustacean Bloggers](#famous-rustacean-bloggers)
 * [Tutorials & Workshop Materials](#tutorials--workshop-materials)
+* [Similar projects](#similar-projects)
 
 ## Books
 
-* :star: [The Rust Programming Language 1st edition](http://doc.rust-lang.org/stable/book/) - [repo](https://github.com/rust-lang/book/tree/master/first-edition)
-* :soon: :star: [The Rust Programming Language 2nd edition](http://rust-lang.github.io/book/second-edition/index.html) - [repo](https://github.com/rust-lang/book/tree/master/second-edition) ([Paper edition](https://www.nostarch.com/Rust))
+* :star: [The Rust Programming Language 1st edition](https://doc.rust-lang.org/stable/book/first-edition/) - [repo](https://github.com/rust-lang/book/tree/master/first-edition)
+* :soon: :star: [The Rust Programming Language 2nd edition](https://doc.rust-lang.org/stable/book/second-edition/) - [repo](https://github.com/rust-lang/book/tree/master/second-edition) ([Paper edition](https://www.nostarch.com/Rust))
 * :star: [The Rust Reference](https://doc.rust-lang.org/stable/reference/) - [repo](https://github.com/rust-lang-nursery/reference)
 * :star: [The Rustonomicon - The Dark Arts of Advanced and Unsafe Rust Programming](https://doc.rust-lang.org/stable/nomicon/) - [repo](https://github.com/rust-lang-nursery/nomicon)
 * :star: [The Unstable Book](https://doc.rust-lang.org/stable/unstable-book/) - [repo](https://github.com/rust-lang/rust/tree/master/src/doc/unstable-book)
 * :star: [Why Rust?](http://www.oreilly.com/programming/free/files/why-rust.pdf) - [Jim Blandy][]
 * [Rust-101](https://www.ralfj.de/projects/rust-101/main.html) - Ralf Jung
-* [Rust Essentials](https://www.packtpub.com/application-development/rust-essentials) - Ivo Balbaert
+* [Rust Essentials](https://www.packtpub.com/application-development/rust-essentials-second-edition) -  Ivo Balbaert
 * :soon: [Programming Rust](http://shop.oreilly.com/product/0636920040385.do) - [Jim Blandy][]
 * [Mastering Rust](https://www.packtpub.com/application-development/mastering-rust) - Vesa Kaihlavirta
 * :star: [Rust Anthology](https://github.com/brson/rust-anthology) - [Brian Anderson][]
 * :soon: [Rust in Action](https://www.manning.com/books/rust-in-action) - TS McNamara
-* :soon: [Network Programming in Rust](https://www.packtpub.com/application-development/network-programming-rust) - Abhishek Chanda
+* [Network Programming in Rust](https://www.packtpub.com/application-development/network-programming-rust) - Abhishek Chanda
+* [Learning Rust](https://www.packtpub.com/application-development/learning-rust) -  Paul Johnson, Vesa Kaihlavirta
+* [Rust Cookbook](https://www.packtpub.com/application-development/rust-cookbook) -  Vigneshwer Dhinakaran
+* [Learning Rust](https://learning-rust.github.io/) - [Dumindu Madunuwan][]
+* [A Gentle Introduction To Rust](http://stevedonovan.github.io/rust-gentle-intro/readme.html) - [Steve Donovan][]
+* [Step Ahead with Rust](https://www.amazon.com/Step-Ahead-Rust-Jonathan-Creekmore/dp/0999361805/) - Jonathan Creekmore
+* :star: [Rust Programming By Example](https://www.amazon.com/Rust-Programming-Example-Guillaume-Gomez/dp/1788390636) - Guillaume Gomez and Antoni Boucher
 
 ## Videos
 
@@ -79,6 +88,7 @@ The main documentation is always the best beginning, so if you haven't read yet,
 * [ABitWiseGuy Tutorials](https://www.youtube.com/watch?v=y-ks-_VDkiA&list=PL0Fqs05rod8D80WKBCeT326CT8vcAm_N9) - ABitWiseGuy
 * [dcode Tutorials](https://www.youtube.com/watch?v=vOMJlQ5B-M0&list=PLVvjrrRCBy2JSHf9tGxGKJ-bYAN_uDCUL) - dcode
 * [Tensor Programming Tutorials](https://www.youtube.com/watch?v=EYqceb2AnkU&list=PLJbE2Yu2zumDF6BX6_RdPisRVHgzV02NW) - Tensor Programming
+* [Hello Rust!](https://www.youtube.com/channel/UCZ_EWaQZCZuGGfnuqUoHujw) - Matthias Endler
 
 ### Presentations
 
@@ -113,18 +123,20 @@ The main documentation is always the best beginning, so if you haven't read yet,
 * [Learning Rust With Entirely Too Many Linked Lists](http://cglab.ca/~abeinges/blah/too-many-lists/book/) - [Alexis Beingessner][]
 * :star: [Let's build a browser engine!](http://limpet.net/mbrubeck/2014/08/08/toy-layout-engine-1.html) - Matt Brubeck
 * [Understanding Over Guesswork](http://hoverbear.org/2015/09/12/understand-over-guesswork/) - [Andrew Hobden][]
-* [Writing an OS in Rust](http://os.phil-opp.com/) - Philipp Oppermann
+* [Writing an OS in Rust 1st edition](http://os.phil-opp.com/) [2nd edition](https://os.phil-opp.com/second-edition/) - Philipp Oppermann
 * [Creating Nintendo 64 emulator from scratch in Rust!](https://www.youtube.com/playlist?list=PL-sXmdrqqYYcznDg4xwAJWQgNL2gRray2) - Jake Taylor
 * [The Many Kinds of Code Reuse in Rust](http://cglab.ca/~abeinges/blah/rust-reuse-and-recycle/) - [Alexis Beingessner][]
 * [Make a Lisp](https://github.com/kanaka/mal/tree/master/rust) - Joel Martin
 * :star: [Modeling Graphs in Rust Using Vector Indices](http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/) - [Niko Matsakis][]
-* [Learning Rust](https://medium.com/learning-rust/rust-basics-e73304ab35c7) | [part 2](https://medium.com/learning-rust/rust-beyond-the-basics-4fc697e3bf4f) | [part 3](https://medium.com/learning-rust/rust-the-tough-part-2ea11ed3693e) | [part 4](https://medium.com/learning-rust/rust-lets-get-it-started-bdd8de58178d) - [Dumindu Madunuwan][]
 * [24 days of Rust series](https://siciarz.net/tag/24%20days%20of%20rust/) - Zbigniew Siciarz
 * :star: [Rust Cookbook](https://github.com/brson/rust-cookbook)
 * :star: [Rust and CSV Parsing](http://blog.burntsushi.net/csv/) - [Andrew Gallant][]
 * [Algorithm Cookbook in Rust](https://github.com/EbTech/rust-algorithms) - Aram Ebtekar
 * :star: [stdx - The missing batteries of Rust](https://github.com/brson/stdx) - [Brian Anderson][]
 * [Writing a Command Line Tool in Rust](http://mattgathu.github.io/writing-cli-app-rust/) - Matt Gathu
+* [Rust - exercism.io](http://exercism.io/languages/rust/about)
+* [Intro to Rust using Permission-based Authorization](http://daringordon.com/authz_rs_tutorial/) - Darin Gordon
+* [Building a DNS server in Rust](https://github.com/EmilHernvall/dnsguide) - Emil Hernvall
 
 ## Best Practices/Style Guides
 
@@ -148,9 +160,11 @@ The main documentation is always the best beginning, so if you haven't read yet,
 * [Rust Container Cheat Sheet](https://docs.google.com/presentation/d/1q-c7UAyrUlM-eZyTo1pd8SZ0qwA_wYxmPZVOQkoDmH4/edit?usp=sharing) - Raph Levien
 * [Graphical depiction of ownership and borrowing in Rust](https://rufflewind.com/img/rust-move-copy-borrow.png) - Phil Ruffwind
 
-## RFCs
+## Rust internals
 
-See [Rust RFCs](https://github.com/rust-lang/rfcs) and [Accepted RFCs](https://rust-lang.github.io/rfcs/)
+* :star: [Rust RFCs](https://github.com/rust-lang/rfcs) and [Accepted RFCs](https://rust-lang.github.io/rfcs/)
+* :star: [Rust Forge](https://forge.rust-lang.org/)
+* :star: [Internals Forum](https://internals.rust-lang.org/)
 
 ## Compilation
 
@@ -180,12 +194,21 @@ See [Rust RFCs](https://github.com/rust-lang/rfcs) and [Accepted RFCs](https://r
 * [Rust Code Coverage Guide: kcov + Travis CI + Codecov / Coveralls](http://sunjay.ca/2016/07/25/rust-code-coverage) - Sunjay Varma
 * [Rust Performance Testing on Travis CI](https://beachape.com/blog/2016/11/02/rust-performance-testing-on-travis-ci/) - Lloyd
 * [Ensuring Beautiful Commits with rustfmt and Travis-CI](http://kneit.in/2016/11/26/rustfmt-in-travisci.html) - Kyle Kneitinger
+* [Great Rust CI ](https://dev.to/cad97/great-rust-ci-1fk6) - Christopher Durham
 
 ## Debug / Profiling
 
 * [Debugging a segfault in my Rust program](https://jvns.ca/blog/2017/12/23/segfault-debugging/) - Julia Evans
 * [Compiler Explorer - See Rust code as assembly](https://rust.godbolt.org/)
 * [Profiling Rust applications on Linux](http://llogiq.github.io/2015/07/15/profiling.html) - [Llogiq][]
+
+## Are we ... yet?
+
+* [Are we web yet?](http://www.arewewebyet.org/)
+* [Are we (I)DE yet?](https://areweideyet.com/)
+* [Are we game yet?](http://arewegameyet.com/)
+* [Are we learning yet?](http://www.arewelearningyet.com/)
+* [Not-Yet-Awesome Rust](https://github.com/ErichDonGubler/not-yet-awesome-rust)
 
 ## Comparison with Other Languages
 
@@ -204,10 +227,12 @@ See [Rust RFCs](https://github.com/rust-lang/rfcs) and [Accepted RFCs](https://r
 | Python          | <ul><li>[Rust for Python Programmers](http://lucumr.pocoo.org/2015/5/27/rust-for-pythonistas/) - Armin Ronacher</li><li>[py2rs](https://github.com/rochacbruno/py2rs) - Bruno Rocha</li></ul> |
 | Ruby            | <ul><li>[Rust for Rubyists](http://www.rustforrubyists.com/) - [Steve Klabnik][]</li></ul> |
 | Swift           | <ul><li>[A Swift guide to Rust](http://faq.sealedabstract.com/rust/) - sealedabstract</li><li>[Rust and Swift](http://www.chriskrycho.com/rust-and-swift.html) - [Chris Krycho][]</li></ul> |
+| Erlang           | <ul><li>[A Comparison between erlang and rust starting from language semantics to runtime features, performance etc..](https://www.infoq.com/articles/rust-erlang-comparison) - Krishna Kumar Thokala</li></ul> |
 
 ## Applications / Libraries / Tools
 
-See the awesome repo [kud1ing/awesome-rust](https://github.com/kud1ing/awesome-rust)
+See repos [kud1ing/awesome-rust](https://github.com/kud1ing/awesome-rust) & [awesomo
+/rust](https://github.com/lk-geimfari/awesomo/blob/master/languages/RUST.md)
 
 ## Language stuff
 
@@ -234,6 +259,7 @@ See the awesome repo [kud1ing/awesome-rust](https://github.com/kud1ing/awesome-r
 * [for loops in Rust](http://xion.io/post/code/rust-for-loop.html) - Karol Kuczmarski
 * [Iteration patterns for Result & Option](http://xion.io/post/code/rust-iter-patterns.html) - Karol Kuczmarski
 * [Little tour of multiple iterators implementation in Rust](https://blog.guillaume-gomez.fr/articles/2017-03-09+Little+tour+of+multiple+iterators+implementation+in+Rust) - Guillaume Gomez
+* [rust-iterators](https://github.com/rustomax/rust-iterators/) - Max Skybin
 
 ### Lifetime
 
@@ -247,10 +273,15 @@ See the awesome repo [kud1ing/awesome-rust](https://github.com/kud1ing/awesome-r
 * [The Little Book of Rust Macros](https://danielkeep.github.io/tlborm/) - [Daniel Keep][]
 * :star: [Macros in Rust part 1](http://www.ncameron.org/blog/macros-in-rust-pt1/) | [part 2](http://www.ncameron.org/blog/macros-in-rust-pt2/) | [part 3](http://ncameron.org/blog/macros-in-rust-pt3/) | [part 4](http://ncameron.org/blog/macros-in-rust-pt4/) - [Nick Cameron][]
 * [How do I use the Standard Library Macros in Rust?](https://mgattozzi.com/how-do-i-std-macros) - [Michael Gattozzi][]
+* [Writing complex macros in Rust: Reverse Polish Notation](https://rreverser.com/writing-complex-macros-in-rust/) - Ingvar Stepanyan
 
 ### MIR
 
 * :star: [Introducing MIR](http://blog.rust-lang.org/2016/04/19/MIR.html) - [Niko Matsakis][]
+
+### Modules
+
+* [Rust Module Essentials ](https://dev.to/hertz4/rust-module-essentials-12oi) - Sam Pagenkopf
 
 ### Monads
 
@@ -274,6 +305,7 @@ See the awesome repo [kud1ing/awesome-rust](https://github.com/kud1ing/awesome-r
 * [Some Notes on `Send` and `Sync`](https://huonw.github.io/blog/2015/02/some-notes-on-send-and-sync/) - [Huon Wilson][]
 * [Sharing Coloring Books With Friends in Rust](http://jeenalee.com/2016/08/15/sharing-coloring-books-in-rust.html) - [Jeena Lee][]
 * [Moving, Cloning, and Copying Coloring Books in Rust](http://jeenalee.com/2016/08/29/move-clone-copy.html) - [Jeena Lee][]
+* [Ref patterns, destructuring, and invisible borrows](https://medium.com/@robertgrosse/ref-patterns-destructuring-and-invisible-borrows-2f8ae6902656) - Robert Grosse
 
 ### Privacy
 
@@ -334,20 +366,23 @@ See the awesome repo [kud1ing/awesome-rust](https://github.com/kud1ing/awesome-r
 
 This is the official [Rust Team](http://www.rust-lang.org/team.html) and [Servo Team](https://github.com/orgs/servo/people)
 
-You search for a rustacean ? [http://www.rustaceans.org/](http://www.rustaceans.org/)
+You search for a rustacean? [http://www.rustaceans.org/](http://www.rustaceans.org/)
 
-You want to meet them IRL ? [Meetup groups](http://www.meetup.com/topics/rust/), [Community calendar](https://www.google.com/calendar/embed?src=apd9vmbc22egenmtu5l6c5jbfc%40group.calendar.google.com), [Community talks list](https://github.com/rust-community/talks), [RustBridge](https://rustbridge.github.io/)
+You want to ask a something? [Users Forum](https://users.rust-lang.org/)
 
-Go to rusty events ? [RustFest](http://www.rustfest.eu/), [RustConf](http://rustconf.com/), [Rust Belt Rust](http://www.rust-belt-rust.com/)
+You want to meet them IRL? [Meetup groups](http://www.meetup.com/topics/rust/), [Community calendar](https://www.google.com/calendar/embed?src=apd9vmbc22egenmtu5l6c5jbfc%40group.calendar.google.com), [Community talks list](https://github.com/rust-community/talks), [RustBridge](https://rustbridge.github.io/)
 
-You are looking for a job ? [Rust Jobs](http://rustjobs.rs/)
+Go to rusty events? [RustFest](http://www.rustfest.eu/), [RustConf](http://rustconf.com/), [Rust Belt Rust](http://www.rust-belt-rust.com/)
 
-You want to stay up to date ? [This Week in Rust](https://this-week-in-rust.org/), [This Week in Rust Docs](http://guillaumegomez.github.io/this-week-in-rust-docs/), [The official reddit](https://www.reddit.com/r/rust/), [Rust Herald](https://herald.community.rs/)
+You are looking for a job? [Rust Jobs](http://rustjobs.rs/)
 
-There is also [The Rust Community Blog](http://blog.community.rs/)
+Are you fast, friendly, and fearless? [Find something Rusty to work on!](https://www.rustaceans.org/findwork/starters)
+
+You want to stay up to date? [The official blog](https://blog.rust-lang.org/), [This Week in Rust](https://this-week-in-rust.org/), [This Week in Rust Docs](http://guillaumegomez.github.io/this-week-in-rust-docs/), [The official reddit](https://www.reddit.com/r/rust/), [Rust Herald](https://herald.community.rs/)
 
 ### Famous Rustacean Bloggers
 
+* [Aaron Turon][] - [blog](http://aturon.github.io/)
 * [Andrew Gallant][] - [blog](http://blog.burntsushi.net/)
 * [Andrew Hobden][] - [blog](https://hoverbear.org/tags/#rust)
 * [Brian Anderson][] - [blog](https://brson.github.io/blog/index.html)
@@ -427,8 +462,16 @@ A few universities have had classes about Rust. Here are links to their public r
 [Patrick Walton]: https://github.com/pcwalton
 [Seo Sanghyeon]: https://github.com/sanxiyn
 [Simon Sapin]: https://github.com/SimonSapin
+[Steve Donovan]: https://github.com/stevedonovan
 [Steve Klabnik]: https://github.com/steveklabnik
 [Steven Fackler]: https://github.com/sfackler
 [Tetsuharu OHZEKI]: https://github.com/saneyuki
 [Yehuda Katz]: https://github.com/wycats
 [Dumindu Madunuwan]: https://github.com/dumindu
+
+## Similar projects
+
+* [Curated Resources to Learn Rust](https://hackr.io/tutorials/learn-rust) - Hackr.io
+* [Rust Anthology Master List](https://github.com/brson/rust-anthology/blob/master/master-list.md) - [Brian Anderson][]
+* [The Rust Community Blog](http://blog.community.rs/)
+
